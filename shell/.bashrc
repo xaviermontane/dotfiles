@@ -12,12 +12,17 @@ HISTTIMEFORMAT="%F %T "
 HISTFILESIZE=10000
 HISTSIZE=500
 
-## append to the history file, and check for win size changes after each command
+## fix cd mispellings, append to history file, and check window size recursively
+shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
 
 PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
+# default editor
+set -o vim
+export VISUAL=vim
+export EDITOR="$VISUAL"
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -32,7 +37,7 @@ case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
 
-# Comment out and deactive colors to not distract the user.
+# Comment out and deactive colors to focus
 force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
@@ -74,10 +79,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
