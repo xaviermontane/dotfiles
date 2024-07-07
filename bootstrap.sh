@@ -12,3 +12,7 @@ chmod 644 ~/.ssh/authorized_keys # readable by everyone, writable only by the us
 
 # Setup for bashrc
 cp ./shell/.bashrc ~/.bashrc
+cp ./shell/.bash_aliases ~/.bash_aliases
+cp ./shell/.bash_profile ~/.bash_profile
+cp ./shell/.bash_prompt ~/.bash_prompt
+source ~/.bashrc
