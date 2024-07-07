@@ -1,6 +1,5 @@
 # ~/.bash_aliases - 40's bash shell aliases and functions
-#
-#  sourced from ~/.bashrc
+#    sourced from ~/.bashrc
 
 # ====================================================== #
 #                                                        #
@@ -15,20 +14,36 @@
 #                                                        #
 # ====================================================== #
 
-
-alias l='ls -CF'
-alias la='ls -A'
-alias ll='ls -alF'
-
-# directory navigation
-alias ..='cd ..;pwd'
-alias ...='cd ../..;pwd'
-alias ....='cd ../../..;pwd'
-
-# better tree
+# Bash aliases
+alias .='cd .'
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias bashclear='echo "" > ~/.bash_history'
+alias clr='clear'
+alias ls='ls -F --show-control-chars'
+alias ll='ls -l'
+alias ll.='ls -la'
+alias lls='ls -la --sort=size'
+alias llt='ls -la --sort=time'
+alias rm='rm -iv'
+alias code='cd ~/code;ls'
 alias tree='tree --dirsfirst -F'
 
-# 40 functions
-cd() {
-    builtin cd "$@" && ls -lA
-}
+# Git aliases
+alias gs='git status -sb'
+alias gcc='git checkout'
+alias gcm='git checkout main'
+alias gaa='git add --all'
+alias gc='git commit -m $2'
+alias push='git push'
+alias gpo='git push origin'
+alias pull='git pull'
+alias clone='git clone'
+alias stash='git stash'
+alias pop='git stash pop'
+alias ga='git add'
+alias gb='git branch'
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gm='git merge'
