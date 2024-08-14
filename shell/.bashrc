@@ -3,7 +3,7 @@
 [ -z "$PS1" ] && return
 
 export PATH="$PATH:$HOME/.local/bin"
-export PS1='\[$(tput bold)\]\[$(tput setaf 6)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 6)\] ‧⁺✶˚ \[$(tput setaf 4)\]\W\[$(tput setaf 2)\]$ \[$(tput setaf 7)\]\[$(tput sgr0)\]'
+export PS1='\[\e[38;5;60m\]\t\[\e[38;5;21m\] [\[\e[38;5;92m\]\u\[\e[38;5;57m\]@\[\e[38;5;63m\]\h\[\e[38;5;21m\]] \[\e[38;5;123m\]\w\[\e[92m\]\$\[\e[0m\]'
 force_color_prompt=yes
 
 # History file configuration
