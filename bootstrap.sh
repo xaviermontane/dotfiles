@@ -18,8 +18,9 @@ for file in ~/.bashrc ~/.bash_aliases ~/.bash_profile ~/.bash_prompt; do
         touch $file
 done
 
-cp ./shell/.bashrc ~/.bashrc
-cp ./shell/.bash_aliases ~/.bash_aliases
-cp ./shell/.bash_profile ~/.bash_profile
-cp ./shell/.bash_prompt ~/.bash_prompt
+# Run from the root of the dotfiles repo
+cp ./shell/.bashrc ~/.config/.bashrc
+cp ./shell/.bash_aliases ~/.config/.bash_aliases
+cp ./shell/.bash_profile ~/.config/.bash_profile
+cp ./shell/.bash_prompt ~/.config/.bash_prompt
 source ~/.bashrc
