@@ -7,7 +7,7 @@ export PS1='\[\e[38;5;60m\]\t\[\e[38;5;21m\] [\[\e[38;5;92m\]\u\[\e[38;5;57m\]@\
 force_color_prompt=yes
 
 # History file configuration
-export HISTFILE=/home/$USER/.config/bash/.bash_history
+export HISTFILE=/home/$USER/.config/shell/.bash_history
 HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:date:* --help:man *:history*:[ \t]*"
 HISTTIMEFORMAT="%F %T "
@@ -58,9 +58,13 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# Source local configs
+# Source configs
 if [ -f /.config ]; then
-    . ~/.config/.dotfiles
+    . ~/.config/shell/.bashrc
+fi
+
+if [ -f ~/.config/shell ]; then
+    . ~/.config/shell/.aliases
 fi
 
 neofetch
