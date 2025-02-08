@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="$HOME/downloads"  # Remove the trailing slash here
+DIR="$HOME/downloads"
 
 # Organize elements within the downloads folder
 for file in "$DIR"/*; do
