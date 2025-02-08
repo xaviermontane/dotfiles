@@ -1,22 +1,31 @@
-#!/bin/bash - 40's bashrc file
+#! usr/bin/bash
 
-[ -z "$PS1" ] && return
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
 
-export PATH="$PATH:$HOME/.local/bin"
-export PS1='\[\e[38;5;60m\]\t\[\e[38;5;21m\] [\[\e[38;5;92m\]\u\[\e[38;5;57m\]@\[\e[38;5;63m\]\h\[\e[38;5;21m\]] \[\e[38;5;123m\]\w\[\e[92m\]\$\[\e[0m\]'
+# Identify the chroot (Debian specific)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# Environment variables
+export EDITOR=neovim
+export PATH="$PATH:/usr/sbin:/sbin"
+
+# Prompt customization
+export PS1='\[\e[35m\]\u\[\e[0m\]@\[\e[95m\]\h\[\e[0m\]:\[\e[36m\]\w\[\e[32m\][\e[0m\]\$ '
 force_color_prompt=yes
 
 # History file configuration
-export HISTFILE=/home/$USER/.config/shell/.bash_history
+export HISTFILE=/home/$USER/.bash_history
 HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:date:* --help:man *:history*:[ \t]*"
 HISTTIMEFORMAT="%F %T "
-
-HISTFILESIZE=10000
-HISTSIZE=500
+HISTFILESIZE=9999
+HISTSIZE=499
 PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-# Fix cd mispellings, append to history file, and check window size recursively
+# Shell behavior
 shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
@@ -28,12 +37,7 @@ fi
 
 set mark-symlinked-directories on
 
-# Default editor
-set -o neovim
-export VISUAL=neovim
-export EDITOR="$VISUAL"
-
-# Enable color for commands
+# Enable command coloring
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
@@ -45,26 +49,20 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# List command after cd
-cd() {
-    builtin cd "$@" && ls -lA
-}
-
 # Make less more friendly for non-text input files
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# Set variable identifying the chroot (Debian specific)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# Source configs
-if [ -f /.config ]; then
+# Source configurations
+if [ -f ~/.config/shell/.bashrc ]; then
     . ~/.config/shell/.bashrc
 fi
-
-if [ -f ~/.config/shell ]; then
+.
+if [ -f ~/.config/shell/.aliases ]; then
     . ~/.config/shell/.aliases
 fi
 
-neofetch
+# Miscellaneous
+eval "$(starship init bash)"
+fastfetch
+
+# with ♡ by 40
