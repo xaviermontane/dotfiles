@@ -17,7 +17,7 @@ export PS1='\[\e[35m\]\u\[\e[0m\]@\[\e[95m\]\h\[\e[0m\]:\[\e[36m\]\w\[\e[32m\][\
 force_color_prompt=yes
 
 # History file configuration
-export HISTFILE=/home/$USER/.bash_history
+export HISTFILE=/$HOME/.bash_history
 HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:date:* --help:man *:history*:[ \t]*"
 HISTTIMEFORMAT="%F %T "
