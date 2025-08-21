@@ -17,6 +17,15 @@ if command -v dircolors &>/dev/null; then
     alias grep='grep --color=auto'
 fi
 
+# Source configurations
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+.
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
+fi
+
 # Starship prompt
 eval "$(starship init bash)"
 
