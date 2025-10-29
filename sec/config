@@ -1,1 +1,81 @@
-// SSH config
+# ==========================
+# F0RTY'S SANITIZED SSH CONFIG
+# Replace text inside <> with your values before use.
+# Remove comments if you want a minimal file.
+# ==========================
+
+# Global defaults (safe public-friendly defaults)
+Host *
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+    ForwardAgent no                # leave disabled in public repos
+    ForwardX11 no
+    Compression yes
+    # IdentityFile ~/.ssh/id_ed25519  # optional: uncomment and set locally (don't commit real keys)
+    IdentitiesOnly yes
+    StrictHostKeyChecking ask      # 'ask' is safer to avoid auto-accepting keys
+    UserKnownHostsFile ~/.ssh/known_hosts
+    LogLevel ERROR
+
+# ==========================
+# GATEWAY / JUMP HOST (placeholder)
+# ==========================
+Host gateway
+    HostName <GATEWAY_HOST_OR_IP>
+    User <GATEWAY_USER>
+    Port <GATEWAY_SSH_PORT>        # default 22
+    # IdentityFile ~/.ssh/id_gateway_private  # set locally if needed
+    ForwardAgent no                # do NOT enable in public configs
+
+# ==========================
+# INTERNAL LAB MACHINES (examples)
+# Replace names and addresses with your connections
+# ==========================
+
+# Example: proxmox / hypervisor
+Host proxmox
+    HostName <PROXMOX_HOST_OR_IP>
+    User <USERNAME>
+    Port <SSH_PORT>
+    ProxyJump gateway
+    # IdentityFile ~/.ssh/id_proxmox
+
+# Example: docker host
+Host docker
+    HostName <DOCKER_HOST_OR_IP>
+    User <USERNAME>
+    Port <SSH_PORT>
+    ProxyJump gateway
+    # IdentityFile ~/.ssh/id_docker
+
+# Example: monitoring / grafana
+Host monitor
+    HostName <MONITOR_HOST_OR_IP>
+    User <USERNAME>
+    Port <SSH_PORT>
+    ProxyJump gateway
+    # IdentityFile ~/.ssh/id_monitor
+
+# Example: off-site backup host (use FQDN)
+Host backup
+    HostName <BACKUP_HOSTNAME_OR_DOMAIN>
+    User <USERNAME>
+    Port <SSH_PORT>                 # could be 22, 443, etc.
+    # For off-site access you may choose NOT to ProxyJump
+    # IdentityFile ~/.ssh/id_backup
+
+# ==========================
+# WILDCARD / VM SHORTCUTS
+# ==========================
+# Example: quick pattern for VMs (replace prefix as you use)
+Host vm-*
+    User <VM_DEFAULT_USER>
+    ProxyJump gateway
+    # IdentityFile ~/.ssh/id_vm_default
+
+# Optional: SSH multiplexer (commented out; enable locally if wanted)
+# Host *
+#     ControlMaster auto
+#     ControlPath ~/.ssh/sockets/%r@%h:%p
+#     ControlPersist 10m
