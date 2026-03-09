@@ -1,9 +1,8 @@
-# !/bin/bash
-
+#!/usr/bin/env bash
 # ───────────────────────────────────────────────
-# Dotfiles Setup Script
+# Dotfiles Bootstrap (Stow + OS-aware)
 # Author: førty
-# Description: Sets up a consistent environment across systems.
+# Description: One-command setup for dotfiles, packages, and environment
 # ───────────────────────────────────────────────
 
 set -e
@@ -12,14 +11,33 @@ shopt -s nullglob
 # ─── Variables ────────────────────────────────────────────────────────────────
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
-SHELL_FILES=(.bashrc .bash_aliases .bash_profile .bash_prompt)
-CONFIG_DIRS=(shell sec dev)
+PACKAGES_DIR="$DOTFILES_DIR/packages"
+PACKAGES_COMMON="$PACKAGES_DIR/packages.common.txt"
+PACKAGES_OS=""
+PACKAGES=""
+PACKAGES_LIST=()
+PACKAGES_FILE=""
 LOG="$HOME/dotfiles_setup.log"
+STOW_PACKAGES=(shell sec dev)
 
-# ─── Logging ─────────────────────────────────────────────────────────────────
-echo "Starting dotfiles setup: $(date)" | tee -a "$LOG"
+echo "[+] Starting dotfiles bootstrap: $(date)" | tee -a "$LOG"
 
-# ─── SSH Permissions ─────────────────────────────────────────────────────────
+# ─── Detect OS ────────────────────────────────────────────────────────────────
+OS="$(uname -s)"
+case "$OS" in
+    Linux*)     OS_TYPE="linux"; PACKAGES_FILE="$PACKAGES_DIR/packages.linux.txt" ;;
+    Darwin*)    OS_TYPE="macos"; PACKAGES_FILE="$PACKAGES_DIR/packages.macos.txt" ;;
+    *)          OS_TYPE="unknown"; PACKAGES_FILE="" ;;
+esac
+
+echo "[+] Detected OS: $OS_TYPE" | tee -a "$LOG"
+
+if [ "$OS_TYPE" = "unknown" ]; then
+    echo "[-] Unsupported OS. Exiting." | tee -a "$LOG"
+    exit 1
+fi
+
+# ─── SSH Permissions ──────────────────────────────────────────────────────────
 if [ -d "$HOME/.ssh" ]; then
     echo "[+] Securing SSH files..." | tee -a "$LOG"
     chmod 700 ~/.ssh
@@ -30,54 +48,58 @@ if [ -d "$HOME/.ssh" ]; then
     chmod 644 ~/.ssh/authorized_keys 2>/dev/null || true
 fi
 
-# ─── Local Backup Existing Configs ─────────────────────────────────────────────────
-echo "[+] Backing up existing configs to $BACKUP_DIR..." | tee -a "$LOG"
+# ─── Backup Existing Dotfiles ─────────────────────────────────────────────────
+echo "[+] Backing up existing dotfiles to $BACKUP_DIR..." | tee -a "$LOG"
 mkdir -p "$BACKUP_DIR"
 
-for file in "${SHELL_FILES[@]}"; do
-    if [ -f "$HOME/$file" ]; then
-        mv "$HOME/$file" "$BACKUP_DIR/" && echo "  ↳ $file backed up" | tee -a "$LOG"
-    fi
-done
-
-# ─── Symlink or Copy Dotfiles ────────────────────────────────────────────────
-echo "[+] Deploying dotfiles..." | tee -a "$LOG"
-for dir in "${CONFIG_DIRS[@]}"; do
-    SRC="$DOTFILES_DIR/$dir"
+for pkg in "${STOW_PACKAGES[@]}"; do
+    SRC="$DOTFILES_DIR/$pkg"
     if [ -d "$SRC" ]; then
         for file in "$SRC"/.*; do
             [ -f "$file" ] || continue
             BASENAME=$(basename "$file")
             DEST="$HOME/$BASENAME"
-            # Backup existing file if it exists
             [ -f "$DEST" ] && [ ! -L "$DEST" ] && cp "$DEST" "$BACKUP_DIR/"
-        if ln -sf "$file" "$DEST"; then
-            echo "  ↳ Linked $BASENAME → $DEST" | tee -a "$LOG"
-        else
-            echo "  ✗ Failed to link $BASENAME" | tee -a "$LOG"
-        fi
         done
     fi
 done
 
-# ─── Install Packages (optional) ─────────────────────────────────────────────
-if command -v apt >/dev/null 2>&1; then
-    echo "[+] Installing packages (Debian-based)..." | tee -a "$LOG"
-    sudo apt update && sudo apt install -y git curl vim
-elif command -v pacman >/dev/null 2>&1; then
-    echo "[+] Installing packages (Arch-based)..." | tee -a "$LOG"
-    sudo pacman -Syu --noconfirm git curl vim
-elif command -v brew >/dev/null 2>&1; then
-    echo "[+] Installing packages (macOS)..." | tee -a "$LOG"
-    brew install git curl vim
-elif command -v choco >/dev/null 2>&1; then
-    echo "[+] Installing packages (Windows)..." | tee -a "$LOG"
-    choco install -y git curl vim
-else
-    echo "[!] No recognized package manager found. Skipping package installation." | tee -a "$LOG"
+# ─── Deploy Dotfiles with Stow ───────────────────────────────────────────────
+echo "[+] Deploying dotfiles via stow..." | tee -a "$LOG"
+for pkg in "${STOW_PACKAGES[@]}"; do
+    if [ -d "$DOTFILES_DIR/$pkg" ]; then
+        stow -v -t "$HOME" "$pkg" | tee -a "$LOG"
+    fi
+done
+
+# ─── Read Packages ────────────────────────────────────────────────────────────
+# Common packages
+[ -f "$PACKAGES_COMMON" ] && PACKAGES=$(grep -vE '^\s*#|^\s*$' "$PACKAGES_COMMON")
+
+# OS-specific packages
+if [ -f "$PACKAGES_FILE" ]; then
+    PACKAGES_OS=$(grep -vE '^\s*#|^\s*$' "$PACKAGES_FILE")
+    PACKAGES="$PACKAGES $PACKAGES_OS"
 fi
 
-# ─── Final Output ───────────────────────────────────────────────────────────
-echo "✔ Dotfiles setup completed successfully!"
-echo "All backups stored in: $BACKUP_DIR"
-echo "Log saved to: $LOG"
+# ─── Install Packages ─────────────────────────────────────────────────────────
+if [ -n "$PACKAGES" ]; then
+    echo "[+] Installing packages: $PACKAGES" | tee -a "$LOG"
+
+    if [ "$OS_TYPE" = "linux" ]; then
+        if command -v apt >/dev/null 2>&1; then
+            sudo apt update | tee -a "$LOG"
+            sudo apt install -y $PACKAGES | tee -a "$LOG"
+        elif command -v pacman >/dev/null 2>&1; then
+            sudo pacman -Sy --noconfirm $PACKAGES | tee -a "$LOG"
+        fi
+    elif [ "$OS_TYPE" = "macos" ]; then
+        if ! command -v brew >/dev/null 2>&1; then
+            echo "[+] Installing Homebrew..." | tee -a "$LOG"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        brew install $PACKAGES | tee -a "$LOG"
+    fi
+fi
+
+echo "[+] Dotfiles bootstrap completed: $(date)" | tee -a "$LOG"

@@ -1,0 +1,7 @@
+git
+curl
+vim
+neovim
+stow
+htop
+tree
