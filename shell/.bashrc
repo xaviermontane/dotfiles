@@ -23,7 +23,7 @@ HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:date:* --help:man *:history*:[ \t]*"
 HISTTIMEFORMAT="%F %T "
 HISTFILESIZE=9999
 HISTSIZE=499
-PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 
 # Shell behavior
 shopt -s cdspell
