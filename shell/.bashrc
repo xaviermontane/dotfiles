@@ -1,9 +1,13 @@
 # exit if non-interactive
 [[ $- != *i* ]] && return
 
-# environment variables
-export EDITOR=nvim
-PATH="$PATH:/usr/sbin:/sbin"
+# environment
+command -v nvim >/dev/null && export EDITOR=nvim || export EDITOR=vim
+
+case ":$PATH:" in
+  *:/usr/sbin:*) ;;
+  *) PATH="$PATH:/usr/sbin:/sbin" ;;
+esac
 
 # history
 HISTSIZE=50000 HISTFILESIZE=100000
