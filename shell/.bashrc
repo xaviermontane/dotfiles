@@ -1,3 +1,5 @@
+# ~/.bashrc
+
 # exit if non-interactive
 [[ $- != *i* ]] && return
 
