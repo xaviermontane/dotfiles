@@ -17,17 +17,17 @@ export PS1='\[\e[35m\]\u\[\e[0m\]@\[\e[95m\]\h\[\e[0m\]:\[\e[36m\]\w\[\e[32m\][\
 force_color_prompt=yes
 
 # History file configuration
-export HISTFILE=/$HOME/.bash_history
+HISTSIZE=50000
+HISTFILESIZE=100000
+
 HISTCONTROL=ignoreboth:erasedups
-HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:date:* --help:man *:history*:[ \t]*"
-HISTTIMEFORMAT="%F %T "
-HISTFILESIZE=9999
-HISTSIZE=499
-PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+HISTIGNORE="ls:cd:pwd:exit"
+
+shopt -s histappend
+PROMPT_COMMAND="history -a; history -n"
 
 # Shell behavior
 shopt -s cdspell
-shopt -s histappend
 shopt -s checkwinsize
 
 # Enable autocomplete
