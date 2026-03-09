@@ -1,68 +1,21 @@
-#! usr/bin/bash
-
-# If not running interactively, don't do anything
+# exit if non-interactive
 [[ $- != *i* ]] && return
 
-# Identify the chroot (Debian specific)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+# environment variables
+export EDITOR=nvim
+PATH="$PATH:/usr/sbin:/sbin"
 
-# Environment variables
-export EDITOR=neovim
-export PATH="$PATH:/usr/sbin:/sbin"
-
-# Prompt customization
-export PS1='\[\e[35m\]\u\[\e[0m\]@\[\e[95m\]\h\[\e[0m\]:\[\e[36m\]\w\[\e[32m\][\e[0m\]\$ '
-force_color_prompt=yes
-
-# History file configuration
-HISTSIZE=50000
-HISTFILESIZE=100000
-
+# history
+HISTSIZE=50000 HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="ls:cd:pwd:exit"
+HISTTIMEFORMAT='%F %T '
 
 shopt -s histappend
 PROMPT_COMMAND="history -a; history -n"
 
-# Shell behavior
-shopt -s cdspell
-shopt -s checkwinsize
-
-# Enable autocomplete
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-
-set mark-symlinked-directories on
-
-# Enable command coloring
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# Make less more friendly for non-text input files
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# Source configurations
-if [ -f ~/.config/shell/.bashrc ]; then
-    . ~/.config/shell/.bashrc
-fi
-.
-if [ -f ~/.config/shell/.aliases ]; then
-    . ~/.config/shell/.aliases
-fi
-
-# Miscellaneous
+# start-up
 eval "$(starship init bash)"
-fastfetch
+command -v fastfetch >/dev/null && fastfetch
 
 # with ♡ by 40
