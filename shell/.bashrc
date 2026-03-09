@@ -4,10 +4,16 @@
 # environment
 command -v nvim >/dev/null && export EDITOR=nvim || export EDITOR=vim
 
-case ":$PATH:" in
-  *:/usr/sbin:*) ;;
-  *) PATH="$PATH:/usr/sbin:/sbin" ;;
-esac
+pathadd () { case ":$PATH:" in *":$1:"*) ;; *) PATH="$PATH:$1";; esac }
+pathadd /usr/sbin
+pathadd /sbin
+unset -f pathadd
+
+# aliases
+[ -f ~/.aliases ] && source ~/.aliases
+
+# functions
+[ -f ~/.functions ] && source ~/.functions
 
 # history
 HISTSIZE=50000 HISTFILESIZE=100000
