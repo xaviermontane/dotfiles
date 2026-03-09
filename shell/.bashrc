@@ -8,7 +8,7 @@ PATH="$PATH:/usr/sbin:/sbin"
 # history
 HISTSIZE=50000 HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
-HISTIGNORE="ls:cd:pwd:exit"
+HISTIGNORE="ls:cd:pwd:exit:clear:history"
 HISTTIMEFORMAT='%F %T '
 
 shopt -s histappend
