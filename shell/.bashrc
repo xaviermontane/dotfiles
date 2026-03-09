@@ -16,10 +16,15 @@ HISTIGNORE="ls:cd:pwd:exit:clear:history"
 HISTTIMEFORMAT='%F %T '
 
 shopt -s histappend
-PROMPT_COMMAND="history -a; history -n"
 
-# start-up
-eval "$(starship init bash)"
+# startup
+__init_starship() {
+    unset -f __init_starship
+    eval "$(starship init bash)"
+}
+
+PROMPT_COMMAND='history -a; history -n; __init_starship'
+
 [[ $TERM != "dumb" ]] && command -v fastfetch >/dev/null && fastfetch
 
 # with ♡ by 40
