@@ -16,6 +16,6 @@ PROMPT_COMMAND="history -a; history -n"
 
 # start-up
 eval "$(starship init bash)"
-command -v fastfetch >/dev/null && fastfetch
+[[ $TERM != "dumb" ]] && command -v fastfetch >/dev/null && fastfetch
 
 # with ♡ by 40
