@@ -17,7 +17,7 @@ HISTTIMEFORMAT='%F %T '
 
 shopt -s histappend
 
-# startup
+# lazy load starship
 __init_starship() {
     unset -f __init_starship
     eval "$(starship init bash)"
@@ -25,6 +25,7 @@ __init_starship() {
 
 PROMPT_COMMAND='history -a; history -n; __init_starship'
 
-[[ $TERM != "dumb" ]] && command -v fastfetch >/dev/null && fastfetch
+# system info banner
+command -v fastfetch >/dev/null && [[ $SHLVL -eq 1 && $TERM != dumb ]] && fastfetch
 
 # with ♡ by 40
