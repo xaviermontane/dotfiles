@@ -1,0 +1,8 @@
+hashcat
+john
+sqlmap
+gobuster
+feroxbuster
+masscan
+proxychains
+bettercap

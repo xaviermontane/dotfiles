@@ -1,0 +1,10 @@
+python
+python-pip
+node
+npm
+go
+docker
+docker-compose
+make
+gcc
+gh

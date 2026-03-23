@@ -1,0 +1,10 @@
+nmap
+tcpdump
+wireshark-cli
+netcat
+socat
+bind
+whois
+traceroute
+mtr
+wireguard-tools
