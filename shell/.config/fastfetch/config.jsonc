@@ -1,22 +1,22 @@
 {
-  logo: { type: auto, padding: { bottom: 3, left: 1 } },
-  display: {
-    separator:  ,
-    key: { width: 11 },
-    color: { title: cyan, keys: magenta }
+  "logo": { "type": "auto", "padding": { "bottom": 3, "left": 1 } },
+  "display": {
+    "separator": "  ",
+    "key": { "width": 11 },
+    "color": { "title": "cyan", "keys": "magenta" }
   },
-  modules: [
-    { type: title },
-    { type: separator },
-    { type: os, key: 󰀵 os },
-    { type: kernel, key: 󰌽 kernel },
-    { type: uptime, key: 󰥔 uptime },
-    { type: packages, key: 󰏖 pkgs },
-    { type: terminal, key: 󰆍 term },
-    { type: shell, key: 󰆍 shell },
-    { type: cpu, key: 󰻠 cpu },
-    { type: gpu, key: 󰢮 gpu },
-    { type: memory, key: 󰍛 mem },
-    { type: disk, key: 󰋊 disk }
+  "modules": [
+    { "type": "title" },
+    { "type": "separator" },
+    { "type": "os", "key": "󰀵 os" },
+    { "type": "kernel", "key": "󰌽 kernel" },
+    { "type": "uptime", "key": "󰥔 uptime" },
+    { "type": "packages", "key": "󰏖 pkgs" },
+    { "type": "terminal", "key": "󰆍 term" },
+    { "type": "shell", "key": "󰆍 shell" },
+    { "type": "cpu", "key": "󰻠 cpu" },
+    { "type": "gpu", "key": "󰢮 gpu" },
+    { "type": "memory", "key": "󰍛 mem" },
+    { "type": "disk", "key": "󰋊 disk" }
   ]
 }
