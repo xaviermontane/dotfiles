@@ -1,22 +1,55 @@
-{
-  "logo": { "type": "auto", "padding": { "bottom": 3, "left": 1 } },
-  "display": {
-    "separator": "  ",
-    "key": { "width": 11 },
-    "color": { "title": "cyan", "keys": "magenta" }
-  },
-  "modules": [
-    { "type": "title" },
-    { "type": "separator" },
-    { "type": "os", "key": "󰀵 os" },
-    { "type": "kernel", "key": "󰌽 kernel" },
-    { "type": "uptime", "key": "󰥔 uptime" },
-    { "type": "packages", "key": "󰏖 pkgs" },
-    { "type": "terminal", "key": "󰆍 term" },
-    { "type": "shell", "key": "󰆍 shell" },
-    { "type": "cpu", "key": "󰻠 cpu" },
-    { "type": "gpu", "key": "󰢮 gpu" },
-    { "type": "memory", "key": "󰍛 mem" },
-    { "type": "disk", "key": "󰋊 disk" }
-  ]
-}
+# ~/.gitconfig - Professional Development Setup
+
+[user]
+    name = Xavier Montane
+    email = xavier.montane@example.com
+    signingkey = ABCDEF1234567890    # GPG key for commit signing
+[core]
+    editor = nvim                    # Use Neovim as default editor
+    autocrlf = input                 # Handle line endings: convert CRLF to LF on commit
+    safecrlf = true                  # Warn about unsafe line endings
+    excludesfile = ~/.gitignore_global
+[merge]
+    tool = vimdiff                   # Default merge tool
+[difftool]
+    prompt = false
+[push]
+    default = simple                 # Push current branch only
+[branch]
+    autosetuprebase = always         # Rebase when pulling
+[alias]
+    st = status                       # git st → git status
+    co = checkout                     # git co → git checkout
+    br = branch                       # git br → git branch
+    cm = commit                        # git cm → git commit
+    amend = commit --amend             # git amend → git commit --amend
+    lg = log --graph --pretty=format:'%C(red)%h%Creset - %C(cyan)%an%Creset, %C(yellow)%ar%Creset : %C(green)%s%Creset' --abbrev-commit --all
+    unstage = reset HEAD --            # git unstage → unstage files
+    last = log -1 HEAD                 # Show last commit
+[credential]
+    helper = osxkeychain               # Store passwords securely on macOS
+[push]
+    autoSetupRemote = true             # Automatically set remote tracking for new branches
+[color]
+    ui = auto                          # Enable colored output
+[color "branch"]
+    current = yellow reverse
+    local = green
+    remote = cyan
+[color "diff"]
+    meta = yellow
+    frag = magenta
+    old = red
+    new = green
+[rebase]
+    autoStash = true                    # Auto-stash changes before rebasing
+[fetch]
+    prune = true                        # Remove remote-tracking branches that no longer exist
+[status]
+    showUntrackedFiles = all            # Show all untracked files
+[pager]
+    log = less -R                       # Preserve color in pager
+[format]
+    pretty = oneline                     # Default format for log commands
+[commit]
+    gpgsign = true                       # Sign all commits by default
