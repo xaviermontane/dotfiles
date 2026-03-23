@@ -19,7 +19,6 @@ alias clr='clear'
 alias bashclear='history -c && history -w'
 alias ff='fastfetch'
 
-alias ls='ls -F --color=auto --show-control-chars'
 alias ll='ls -lah'
 alias lls='ls -la --sort=size'
 alias llt='ls -la --sort=time'
