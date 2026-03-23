@@ -1,9 +1,13 @@
-echo "Checking lab storage..."
+echo "[+] Checking storage"
 
-if [ -d "/Volumes/homelab" ]; then
-export LAB="/Volumes/homelab"
+if [ -d "/mnt/homelab" ]; then
+    LAB_ROOT="/mnt/homelab"
+elif [ -d "/Volumes/homelab" ]; then
+    LAB_ROOT="/Volumes/homelab"
+fi
 
-elif [ -d "/mnt/homelab" ]; then
-export LAB="/mnt/homelab"
-
+if [ -n "$LAB_ROOT" ]; then
+    echo "[+] Found lab storage"
+    mkdir -p $LAB_ROOT/{vm,pcap,tools,backup}
+    export LAB_ROOT
 fi
